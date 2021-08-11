@@ -1,81 +1,38 @@
 import React, { useContext, useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { createEvent, EventContext } from "./EventProvider.js";
-import { GameContext } from "./GameProvider.js";
+import { GameContext } from "../game/GameProvider.js";
 
 export const EventForm = () => {
   const history = useHistory();
-  const { createEvent, getEvents } = useContext(EventContext);
-  const { getGameTypes, games } = useContext(GameContext);
+  const { createEvent } = useContext(EventContext);
+  const { getGames, games } = useContext(GameContext);
   const [currentEvent, setCurrentEvent] = useState({
-    host: 0,
-    game: 0,
-    title: "",
-    description: "",
-    date: "",
-    time: "",
+    // host: 0,
+    // game: 0,
+    // title: "",
+    // description: "",
+    // date: "",
+    // time: "",
   });
 
   useEffect(() => {
-    getEvents();
-    getGameTypes();
+    getGames();
   }, []);
 
-  const changeEventHostState = (event) => {
+  // this function replaces all changeEvent functions with a single, universal function for state
+  // see bottom of module for old functions
+
+  const changeEventState = (event) => {
     const newEventState = { ...currentEvent };
-    newEventState.host = event.target.value;
+    newEventState[event.target.name] = event.target.value;
     setCurrentEvent(newEventState);
   };
 
-  const changeEventGameState = (event) => {
-    const newEventState = { ...currentEvent };
-    newEventState.gameId = event.target.value;
-    setCurrentEvent(newEventState);
-  };
-
-  const changeEventTitleState = (event) => {
-    const newEventState = { ...currentEvent };
-    newEventState.name = event.target.value;
-    setCurrentEvent(newEventState);
-  };
-
-  const changeEventDescriptionState = (event) => {
-    const newEventState = { ...currentEvent };
-    newEventState.description = event.target.value;
-    setCurrentEvent(newEventState);
-  };
-
-  const changeEventDateState = (event) => {
-    const newEventState = { ...currentEvent };
-    newEventState.date = event.target.value;
-    setCurrentEvent(newEventState);
-  };
-
-  const changeEventTimeState = (event) => {
-    const newEventState = { ...currentEvent };
-    newEventState.time = event.target.value;
-    setCurrentEvent(newEventState);
-  };
-
+  // New Event Registration Form
   return (
     <form className="gameForm">
       <h2 className="gameForm__title">Schedule New Event</h2>
-      <fieldset>
-        <div className="form-group">
-          <label htmlFor="host">Host: </label>
-          {/* <select
-            name="host"
-            className="form-control"
-            value={currentEvent.host}
-            onChange={changeEventHostState}
-          >
-            <option value="0">Select a host...</option>
-            {gamers.map((gamer) => (
-              <option>{gamer.id}</option>
-            ))}
-          </select> */}
-        </div>
-      </fieldset>
       <fieldset>
         <div className="form-group">
           <label htmlFor="gameId">Game: </label>
@@ -83,11 +40,11 @@ export const EventForm = () => {
             name="gameId"
             className="form-control"
             value={currentEvent.gameId}
-            onChange={changeEventGameState}
+            onChange={changeEventState}
           >
             <option value="0">Select a game...</option>
             {games.map((game) => (
-              <option>{game.name}</option>
+              <option value={game.id}>{game.name}</option>
             ))}
           </select>
         </div>
@@ -102,7 +59,7 @@ export const EventForm = () => {
             autoFocus
             className="form-control"
             value={currentEvent.title}
-            onChange={changeEventTitleState}
+            onChange={changeEventState}
           />
         </div>
       </fieldset>
@@ -116,7 +73,7 @@ export const EventForm = () => {
             autoFocus
             className="form-control"
             value={currentEvent.description}
-            onChange={changeEventDescriptionState}
+            onChange={changeEventState}
           />
         </div>
       </fieldset>
@@ -124,13 +81,13 @@ export const EventForm = () => {
         <div className="form-group">
           <label htmlFor="date">Date: </label>
           <input
-            type="text"
+            type="date"
             name="date"
             required
             autoFocus
             className="form-control"
             value={currentEvent.date}
-            onChange={changeEventDateState}
+            onChange={changeEventState}
           />
         </div>
       </fieldset>
@@ -138,13 +95,13 @@ export const EventForm = () => {
         <div className="form-group">
           <label htmlFor="time">Time: </label>
           <input
-            type="text"
+            type="time"
             name="time"
             required
             autoFocus
             className="form-control"
             value={currentEvent.time}
-            onChange={changeEventTimeState}
+            onChange={changeEventState}
           />
         </div>
       </fieldset>
@@ -165,3 +122,39 @@ export const EventForm = () => {
     </form>
   );
 };
+
+// const changeEventHostState = (event) => {
+//   const newEventState = { ...currentEvent };
+//   newEventState.host = event.target.value;
+//   setCurrentEvent(newEventState);
+// };
+
+// const changeEventGameState = (event) => {
+//   const newEventState = { ...currentEvent };
+//   newEventState.gameId = event.target.value;
+//   setCurrentEvent(newEventState);
+// };
+
+// const changeEventTitleState = (event) => {
+//   const newEventState = { ...currentEvent };
+//   newEventState.name = event.target.value;
+//   setCurrentEvent(newEventState);
+// };
+
+// const changeEventDescriptionState = (event) => {
+//   const newEventState = { ...currentEvent };
+//   newEventState.description = event.target.value;
+//   setCurrentEvent(newEventState);
+// };
+
+// const changeEventDateState = (event) => {
+//   const newEventState = { ...currentEvent };
+//   newEventState.date = event.target.value;
+//   setCurrentEvent(newEventState);
+// };
+
+// const changeEventTimeState = (event) => {
+//   const newEventState = { ...currentEvent };
+//   newEventState.time = event.target.value;
+//   setCurrentEvent(newEventState);
+// };
